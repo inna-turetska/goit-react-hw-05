@@ -8,7 +8,7 @@ export default function SearchBox({ onSearch, movies, isLoading, error,searchQue
   return (
     <div>
       <Formik
-        initialValues={{ searchQuery:"" }} 
+        initialValues={{ searchQuery:searchQuery||"" }} 
         enableReinitialize
         onSubmit={onSearch}
       >
@@ -19,7 +19,7 @@ export default function SearchBox({ onSearch, movies, isLoading, error,searchQue
               name="searchQuery"
               placeholder="Поиск фильмов"
               value={values.searchQuery}
-              onChange={handleChange}
+               onChange={handleChange}
             />
             <button type="submit" disabled={isSubmitting}>
               Искать
