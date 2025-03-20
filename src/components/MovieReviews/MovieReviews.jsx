@@ -39,9 +39,7 @@ export default function MovieReviews() {
         <div>
             {isLoading && <p>Loading...</p>}
             {error && <p>Error loading reviews. Please try again later.</p>}
-            {!isLoading && !error && reviews.length === 0 && (
-                <p>We don't have any reviews for this movie.</p>
-            )}
+            
             {reviews.length > 0 ? (
                 <ul>
                     {reviews.map((review) => (

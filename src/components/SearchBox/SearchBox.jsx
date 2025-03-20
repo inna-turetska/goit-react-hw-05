@@ -1,64 +1,16 @@
 import { Field, Formik, Form } from 'formik';
-import { useState, useEffect } from 'react';
-import { fetchSearch } from '../../TmbdService';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-export default function SearchBox() {
-  const [films, setFilms] = useState([]); 
-  const [isLoading, setIsLoading] = useState(false); 
-  const [error, setError] = useState(false); 
-  const [searchParams, setSearchParams] = useSearchParams(); 
-  const queryParam = searchParams.get('query') || '';
+export default function SearchBox({ onSearch, movies, isLoading, error,searchQuery }) 
 
-  const [searchQuery, setSearchQuery] = useState(queryParam); 
-
-  useEffect(() => {
-    if (queryParam !== searchQuery) {
-      setSearchQuery(queryParam);
-    }
-  }, [queryParam]);
-
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setFilms([]); 
-      return;
-    }
-
-    async function getSearchResults() {
-      try {
-        setIsLoading(true);
-        setError(false);
-        const results = await fetchSearch(searchQuery); 
-        setFilms(results);
-      } catch (err) {
-        setError(true);
-        setFilms([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    getSearchResults();
-  }, [searchQuery]);
-
-  const handleSubmit = (values, { setSubmitting }) => {
-    if (!values.searchQuery.trim()) {
-      alert('Введите запрос для поиска');
-      setSubmitting(false);
-      return;
-    }
-    
-    setSearchQuery(values.searchQuery);
-    setSearchParams({ query: values.searchQuery });
-    setSubmitting(false);
-  };
+{ 
 
   return (
     <div>
       <Formik
-        initialValues={{ searchQuery }} 
+        initialValues={{ searchQuery:"" }} 
         enableReinitialize
-        onSubmit={handleSubmit}
+        onSubmit={onSearch}
       >
         {({ isSubmitting, handleChange, values }) => (
           <Form>
@@ -80,11 +32,11 @@ export default function SearchBox() {
       {error && <p>Error, try later</p>} 
 
       <ul>
-        {films.length > 0 ? (
-          films.map((film) => (
-            <li key={film.id}>
-              <Link to={`/movies/${film.id}`}>
-                <p>{film.title}</p>
+        {movies.length > 0 ? (
+          movies.map((movie) => (
+            <li key={movie.id}>
+              <Link to={`/movies/${movie.id}`}>
+                <p>{movie.title}</p>
               </Link>
             </li>
           ))
